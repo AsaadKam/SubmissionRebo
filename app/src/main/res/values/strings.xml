@@ -1,0 +1,11 @@
+
+
+<resources>
+<string name="app_name">Challenge</string>
+<string name="action_settings">Settings</string>
+<string name="NoteForEditTextDefault">Enter the operator.</string>
+<string name="NoteForEditTextNumberOperatorEntered">Enter the second operand.</string>
+<!-- Strings used for fragments for navigation -->
+
+
+</resources>
