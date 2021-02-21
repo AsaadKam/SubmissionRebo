@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.challenge.ui.CalculatorViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="0dp">
+
+        <EditText
+
+            android:id="@+id/Entry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|center_horizontal|center_vertical"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="6"
+            android:ems="10"
+            android:enabled="false"
+            android:gravity="center_horizontal"
+            android:hint="@string/NoteForEditTextDefault"
+            android:inputType="number"
+            android:paddingLeft="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|center_horizontal|center_vertical"
+            android:layout_marginBottom="3dp"
+            android:layout_weight="6"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/Undo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="@{viewModel::onClick}"
+                android:text="Undo"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/Redo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:onClick="@{viewModel::onClick}"
+                android:text="Redo"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|center_horizontal|center_vertical"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_weight="6"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/Plus"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_weight="2"
+                android:onClick="@{viewModel::onClick}"
+                android:text="+" />
+
+            <Button
+                android:id="@+id/Minus"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:onClick="@{viewModel::onClick}"
+                android:text="-" />
+
+            <Button
+                android:id="@+id/Mult"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:onClick="@{viewModel::onClick}"
+                android:text="*" />
+
+            <Button
+                android:id="@+id/Div"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:onClick="@{viewModel::onClick}"
+                android:text="/" />
+
+            <Button
+                android:id="@+id/Equal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="36dp"
+                android:layout_marginRight="36dp"
+                android:layout_weight="1"
+                android:onClick="@{viewModel::onClick}"
+                android:text="="
+                android:textColor="#FFFFFF"
+                app:backgroundTint="#4D1DA3"
+                app:rippleColor="#171010" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|center_horizontal|center_vertical"
+            android:layout_weight="6"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#4D2595"
+                android:gravity="clip_vertical|center_horizontal|center_vertical"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Result"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/Result"
+                android:layout_width="228dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_weight="4"
+                android:background="#E91E63"
+                android:gravity="center|center_horizontal"
+                android:text="@{viewModel.ReturnResultLiveData()}"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="clip_vertical|center_horizontal|center_vertical"
+            android:layout_marginTop="20dp"
+            android:layout_weight="3"
+            android:background="#4D1DA3"
+            android:foregroundGravity="center_vertical|center_horizontal"
+            android:padding="30dp"
+            tools:listitem="@layout/calculator_list_item" />
+
+    </LinearLayout>
+</layout>

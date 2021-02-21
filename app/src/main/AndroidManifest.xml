@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Challenge">
-        <activity android:name=".ui.CalculatorActivity">
+        <activity
+            android:windowSoftInputMode="adjustPan|adjustResize"
+            android:name="com.example.challenge.ui.CalculatorActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Challenge.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
