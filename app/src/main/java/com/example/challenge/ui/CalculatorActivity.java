@@ -20,8 +20,6 @@ import java.util.ArrayList;
  * interaction with the fetched data
  * from everywhere and create the main ui
  ******************************************************/
-
-
 public class CalculatorActivity extends AppCompatActivity
 {
 
@@ -41,7 +39,7 @@ public class CalculatorActivity extends AppCompatActivity
         CalculatorActivityBinding activityMainBinding = DataBindingUtil.setContentView(this, R.layout.calculator_activity);
         /******Passing binding*******/
         calculatorViewModel.init(activityMainBinding,this);
-        /*****Create the linke between the xml and activity to let the clicking events and observing on xml****/
+        /*****Create the link between the xml and activity to let the clicking events and observing on xml****/
         activityMainBinding.setViewModel(calculatorViewModel);
         activityMainBinding.setLifecycleOwner(this);
 
@@ -59,11 +57,11 @@ public class CalculatorActivity extends AppCompatActivity
                 , new Observer<ArrayList<CalculatorModel>>()
                 {
                     @Override
-                    public void onChanged(ArrayList<CalculatorModel> calculatorModels)
+                    public void onChanged(ArrayList<CalculatorModel> calculatorHistoryLists)
                     {
                         calculatorViewList.clear();
                         calculatorListAdapter.notifyDataSetChanged();
-                        calculatorViewList.addAll(calculatorModels);
+                        calculatorViewList.addAll(calculatorHistoryLists);
                         calculatorListAdapter.notifyDataSetChanged();
                     }
                 }

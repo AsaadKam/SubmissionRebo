@@ -28,7 +28,7 @@ public class CalculatorViewModel extends ViewModel
     private final static String TAG = "VIEWMODEL";
     private ArrayList<CalculatorModel> cvmIntegerRedoList = new ArrayList<CalculatorModel>();
     private int intergerClickedPosition = 0;
-    private double doubleResultBuffer = 0;
+    private int intResultBuffer = 0;
     private int integerSecondOperandBuffer = 0;
     private char characterOperatorBuffer = '-';
     private MutableLiveData<ArrayList<CalculatorModel>> cvmRecycLerViewMutuableLiveData = new MutableLiveData<ArrayList<CalculatorModel>>();
@@ -79,7 +79,8 @@ public class CalculatorViewModel extends ViewModel
                         }
 
                 );
-        cvmCalculatorActivityBinding.recycler.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+        cvmCalculatorActivityBinding.recycler.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() 
+        {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e)
             {
@@ -100,7 +101,8 @@ public class CalculatorViewModel extends ViewModel
 
                         if (cvmRecycLerViewArrayList.size() != 0)
                         {
-                            cvmCalc_Undo_Operation(characterOperatorBuffer,integerSecondOperandBuffer);
+                            intResultBuffer=cvmCalc_Undo_Operation(characterOperatorBuffer,integerSecondOperandBuffer,intResultBuffer);
+                            cvmResultString.setValue(Integer.toString(intResultBuffer));
                             cvmRemoveRecyclerViewLastItem();
                             cvmUndoUiEffect();
                         } else
@@ -184,7 +186,9 @@ public class CalculatorViewModel extends ViewModel
                     cvmCalculatorActivityBinding.Redo.setEnabled(false);
                 }
                 cvmAddRecyclerViewItem(characterOperatorBuffer, integerSecondOperandBuffer);
-                cvmCalc_Operation(characterOperatorBuffer,integerSecondOperandBuffer);
+                intResultBuffer=cvmCalc_Operation(characterOperatorBuffer,integerSecondOperandBuffer,intResultBuffer);
+                cvmResultString.setValue(Integer.toString(intResultBuffer));
+                cvmResultString.setValue(Integer.toString(intResultBuffer));
                 cvmCalculatorActivityBinding.Undo.setEnabled(true);
 
 
@@ -199,7 +203,8 @@ public class CalculatorViewModel extends ViewModel
 
                 if (cvmRecycLerViewArrayList.size() != 0)
                 {
-                    cvmCalc_Undo_Operation(characterOperatorBuffer,integerSecondOperandBuffer);
+                    intResultBuffer=cvmCalc_Undo_Operation(characterOperatorBuffer,integerSecondOperandBuffer,intResultBuffer);
+                    cvmResultString.setValue(Integer.toString(intResultBuffer));
                     cvmRemoveRecyclerViewLastItem();
                     cvmUndoUiEffect();
                 } else
@@ -219,69 +224,70 @@ public class CalculatorViewModel extends ViewModel
                 /******Disable equal and remove number from edit text and write the default hint******/
                 cvmEqualUiEffect();
                 /**********Here is the operation*********/
-                cvmCalc_Operation(characterOperatorBuffer,integerSecondOperandBuffer);
+                intResultBuffer=cvmCalc_Operation(characterOperatorBuffer,integerSecondOperandBuffer,intResultBuffer);
+                cvmResultString.setValue(Integer.toString(intResultBuffer));
 
                 break;
 
 
         }
     }
-
+    /**Testable***/
     public LiveData<String> ReturnResultLiveData()
     {
         return cvmResultString;
     }
-
+    /**Testable***/
     public LiveData<ArrayList<CalculatorModel>> ReturnRecycLerViewArrayList() {
         return cvmRecycLerViewMutuableLiveData;
     }
-
-    private void cvmCalc_Undo_Operation(char c, int number) {
+    /**Testable***/
+    private int cvmCalc_Undo_Operation(char c, int number, int LastValueOfSum) {
         switch (c) {
             case '+':
-                doubleResultBuffer -= number;
+                LastValueOfSum -= number;
                 break;
             case '-':
-                doubleResultBuffer += number;
+                LastValueOfSum += number;
 
                 break;
             case '*':
-                doubleResultBuffer /= number;
+                LastValueOfSum /= number;
 
                 break;
             case '/':
-                doubleResultBuffer *= number;
+                LastValueOfSum *= number;
+
+                break;
+        }
+        return LastValueOfSum;
+
+    }
+    /**Testable***/
+    private int  cvmCalc_Operation(char c, int number,int LastValueOfSum) {
+        switch (c) {
+            case '+':
+                LastValueOfSum += number;
+                break;
+            case '-':
+                LastValueOfSum -= number;
+
+                break;
+            case '*':
+                LastValueOfSum *= number;
+
+                break;
+            case '/':
+                LastValueOfSum /= number;
 
                 break;
         }
 
-        cvmResultString.setValue(Double.toString(doubleResultBuffer));
-    }
-
-    private void cvmCalc_Operation(char c, int number) {
-        switch (c) {
-            case '+':
-                doubleResultBuffer += number;
-                break;
-            case '-':
-                doubleResultBuffer -= number;
-
-                break;
-            case '*':
-                doubleResultBuffer *= number;
-
-                break;
-            case '/':
-                doubleResultBuffer /= number;
-
-                break;
-        }
-
-        cvmResultString.setValue(Double.toString(doubleResultBuffer));
+        return LastValueOfSum;
     }
 
 
-
+    /**Testable***/
     private int cvmGetIntNumberFromEntry() {
         return Integer.parseInt(String.valueOf(cvmCalculatorActivityBinding.Entry.getText()));
     }
@@ -303,29 +309,33 @@ public class CalculatorViewModel extends ViewModel
         cvmCalculatorActivityBinding.Div.setEnabled(true);
 
     }
-
+    /**Testable***/
     private char cvmRecycLerViewGetTheOperator() {
         return cvmRecycLerViewArrayList.get(cvmRecycLerViewArrayList.size() - 1).getChar_CalculatorModel_Operator();
     }
-
+    /**Testable***/
     private int cvmRecycLerViewGetTheNumber() {
         return cvmRecycLerViewArrayList.get(cvmRecycLerViewArrayList.size() - 1).getInt_CalculatorModel_Number();
     }
+    /**Testable***/
     private char cvmRecycLerViewGetTheOperator(int index) {
         return cvmRecycLerViewArrayList.get(index).getChar_CalculatorModel_Operator();
     }
-
+    /**Testable***/
     private int cvmRecycLerViewGetTheNumber(int index) {
         return cvmRecycLerViewArrayList.get(index).getInt_CalculatorModel_Number();
     }
+    /**Testable***/
     private int cvmRedoArrayListGetTheNumber()
     {
         return cvmIntegerRedoList.get(cvmIntegerRedoList.size() - 1).getInt_CalculatorModel_Number();
 
     }
+    /**Testable***/
     private char cvmRedoArrayListGetTheOperator() {
         return cvmIntegerRedoList.get(cvmIntegerRedoList.size() - 1).getChar_CalculatorModel_Operator();
     }
+
     private void cvmAddRecyclerViewItem( int itemIndex,char operator,int number )
     {
         cvmRecycLerViewArrayList.add(itemIndex,new CalculatorModel(operator,number));

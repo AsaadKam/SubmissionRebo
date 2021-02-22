@@ -14,6 +14,9 @@ import com.example.challenge.R;
 
 import java.util.ArrayList;
 
+/**
+ * This class for CalculatorListAdapter
+ */
 public class CalculatorListAdapter extends RecyclerView.Adapter<CalculatorListAdapter.CalculatorViewHolder>
 {
     private  ArrayList<CalculatorModel>  calculatorArrayList;
