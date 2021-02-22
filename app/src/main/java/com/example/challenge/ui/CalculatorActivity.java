@@ -20,8 +20,11 @@ import java.util.ArrayList;
  * interaction with the fetched data
  * from everywhere and create the main ui
  ******************************************************/
+
+
 public class CalculatorActivity extends AppCompatActivity
 {
+
     private static final String TAG = "MainActivity";
 
     @SuppressLint("LongLogTag")
@@ -43,7 +46,7 @@ public class CalculatorActivity extends AppCompatActivity
         activityMainBinding.setLifecycleOwner(this);
 
         /******Intialization for RecyclerView******/
-        final ArrayList<CalculatorModel> calculatorViewList = new ArrayList<CalculatorModel>();
+        ArrayList<CalculatorModel> calculatorViewList = new ArrayList<CalculatorModel>();
         CalculatorListAdapter calculatorListAdapter =new CalculatorListAdapter(calculatorViewList);
         activityMainBinding.recycler.setLayoutManager(new GridLayoutManager(getApplicationContext(),5));
         activityMainBinding.recycler.setAdapter(calculatorListAdapter);

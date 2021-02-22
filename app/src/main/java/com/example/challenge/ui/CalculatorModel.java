@@ -25,6 +25,10 @@ public class CalculatorModel
         return char_CalculatorModel_Operator;
     }
 
+    /**
+     *
+     * @param char_CalculatorModel_Operator
+     */
     public void setChar_CalculatorModel_Operator(char char_CalculatorModel_Operator)
     {
         this.char_CalculatorModel_Operator = char_CalculatorModel_Operator;
