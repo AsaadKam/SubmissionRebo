@@ -2,6 +2,7 @@ package com.example.challenge.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -42,7 +43,6 @@ public class CalculatorActivity extends AppCompatActivity
         /*****Create the link between the xml and activity to let the clicking events and observing on xml****/
         activityMainBinding.setViewModel(calculatorViewModel);
         activityMainBinding.setLifecycleOwner(this);
-
         /******Intialization for RecyclerView******/
         ArrayList<CalculatorModel> calculatorViewList = new ArrayList<CalculatorModel>();
         CalculatorListAdapter calculatorListAdapter =new CalculatorListAdapter(calculatorViewList);

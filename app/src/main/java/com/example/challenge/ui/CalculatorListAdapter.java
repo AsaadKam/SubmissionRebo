@@ -15,16 +15,30 @@ import com.example.challenge.R;
 import java.util.ArrayList;
 
 /**
- * This class for CalculatorListAdapter
+ * This class is the adapter of the Recycler view
  */
 public class CalculatorListAdapter extends RecyclerView.Adapter<CalculatorListAdapter.CalculatorViewHolder>
 {
+    /***
+     * This array list that
+     */
     private  ArrayList<CalculatorModel>  calculatorArrayList;
+
+    /***
+     * This is the constructor of the class
+     * @param passedCalculatorArrayList
+     */
     public CalculatorListAdapter(ArrayList<CalculatorModel> passedCalculatorArrayList)
     {
         calculatorArrayList=passedCalculatorArrayList;
     }
 
+    /***
+     *Here where the view is inflated
+     * @param parent
+     * @param viewType
+     * @return
+     */
 
     @NonNull
     @Override
@@ -34,6 +48,11 @@ public class CalculatorListAdapter extends RecyclerView.Adapter<CalculatorListAd
         return new CalculatorViewHolder(view);
     }
 
+    /**
+     * This method where the update of the view happens
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull CalculatorViewHolder holder, int position)
     {
@@ -42,6 +61,10 @@ public class CalculatorListAdapter extends RecyclerView.Adapter<CalculatorListAd
 
     }
 
+    /**
+     * This method returns the size of list
+     * @return
+     */
     @Override
     public int getItemCount()
     {
@@ -49,8 +72,9 @@ public class CalculatorListAdapter extends RecyclerView.Adapter<CalculatorListAd
 
     }
 
-
-
+    /***
+     * This class implements the interface of RecyclerView.ViewHolder to generate the view of the list
+     */
     public class CalculatorViewHolder extends RecyclerView.ViewHolder
     {
         TextView   rVTextView=null;
