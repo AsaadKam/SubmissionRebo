@@ -270,6 +270,25 @@ public class CalculatorViewModelFunctions
     }
 
     /**
+     *
+     */
+    void equalWhenThereIsNoDivisonByZeorUiEffect()
+    {
+        /******Disable operators and enable the entry******/
+        calculatorActivityBinding.Equal.setEnabled(false);
+        calculatorActivityBinding.Entry.setText("");
+        calculatorActivityBinding.Entry.setHint("Enter the operator.");
+
+        calculatorActivityBinding.Entry.setEnabled(false);
+        calculatorActivityBinding.Plus.setEnabled(true);
+        calculatorActivityBinding.Minus.setEnabled(true);
+        calculatorActivityBinding.Mult.setEnabled(true);
+        calculatorActivityBinding.Div.setEnabled(true);
+
+    }
+
+
+    /**
      * This method helps on make the edit text open sponetneously after certain action
      */
     public void showdEditTextKeyboard()

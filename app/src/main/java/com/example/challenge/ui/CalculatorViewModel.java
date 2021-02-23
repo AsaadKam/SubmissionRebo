@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -52,7 +53,7 @@ public class CalculatorViewModel extends ViewModel
     /**
      * It is an integer that
      */
-    private int cvmIntResultBuffer = 0;
+    private double cvmDoubleResultBuffer = 0;
     /**
      * It is an integer that act as for Second Operand as buffer
      */
@@ -80,7 +81,7 @@ public class CalculatorViewModel extends ViewModel
     /**
      * It is helper class that used to abstract the calculatoViewModel and handle for it the ambiguous things
      */
-    private CalculatorViewModelFunctions calculatorViewModelFunctions=null;
+    private CalculatorViewModelFunctions cvmCalculatorViewModelFunctions=null;
 
     /**
      * It is a method that takes the binding and passed
@@ -92,11 +93,13 @@ public class CalculatorViewModel extends ViewModel
      */
     public void init(CalculatorActivityBinding activityBinding, Context passedcontext)
     {
+        /*Init Context*/
+        cvmContext=passedcontext;
 
         /*****Binding init***********/
         cvmBindingCalculatorActivity = activityBinding;
         /*******Initialization*********/
-        calculatorViewModelFunctions=new CalculatorViewModelFunctions(cvmBindingCalculatorActivity,passedcontext);
+        cvmCalculatorViewModelFunctions=new CalculatorViewModelFunctions(cvmBindingCalculatorActivity,passedcontext);
         /*****Make result value is zero******/
         cvmMutuableLiveDataResultString.setValue("0");
         /******When the text has number we enable the equal to be clicked*********/
@@ -117,7 +120,7 @@ public class CalculatorViewModel extends ViewModel
                         /****************Check whether the entered value is numbers or not******************/
 
                         String stringBuffer= String.valueOf(cvmBindingCalculatorActivity.Entry.getText());
-                        if(calculatorViewModelFunctions.isThatNumber(stringBuffer) )
+                        if(cvmCalculatorViewModelFunctions.isThatNumber(stringBuffer) )
                         {
 
                             cvmBindingCalculatorActivity.Equal.setEnabled(true);
@@ -154,17 +157,17 @@ public class CalculatorViewModel extends ViewModel
                     for(int i=cvmRecycLerViewArrayList.size()-1;i>=rv.getChildLayoutPosition(child);i--)
                     {
 
-                        cvmCharacterOperatorBuffer = calculatorViewModelFunctions.getTheLastOperatorOfRecycLerViewList(cvmRecycLerViewArrayList);
-                        cvmIntegerSecondOperandBuffer = calculatorViewModelFunctions.getTheLastNumberOfRecycLerViewList(cvmRecycLerViewArrayList);
-                        calculatorViewModelFunctions.pushPassedOperatorAndNumberOnRedoArrayList(cvmCharacterOperatorBuffer, cvmIntegerSecondOperandBuffer,cvmRedoRecycLerViewArrayList);
+                        cvmCharacterOperatorBuffer = cvmCalculatorViewModelFunctions.getTheLastOperatorOfRecycLerViewList(cvmRecycLerViewArrayList);
+                        cvmIntegerSecondOperandBuffer = cvmCalculatorViewModelFunctions.getTheLastNumberOfRecycLerViewList(cvmRecycLerViewArrayList);
+                        cvmCalculatorViewModelFunctions.pushPassedOperatorAndNumberOnRedoArrayList(cvmCharacterOperatorBuffer, cvmIntegerSecondOperandBuffer,cvmRedoRecycLerViewArrayList);
 
                         if (cvmRecycLerViewArrayList.size() != 0)
                         {
-                            cvmIntResultBuffer=calculatorViewModelFunctions.calc_Undo_Operation(cvmCharacterOperatorBuffer,cvmIntegerSecondOperandBuffer,cvmIntResultBuffer);
-                            cvmMutuableLiveDataResultString.setValue(Integer.toString(cvmIntResultBuffer));
-                            calculatorViewModelFunctions.removeTheLastItemOfRecyclerView(cvmRecycLerViewArrayList);
+                            cvmDoubleResultBuffer=cvmCalculatorViewModelFunctions.calc_Undo_Operation(cvmCharacterOperatorBuffer,cvmIntegerSecondOperandBuffer,(int)cvmDoubleResultBuffer);
+                            cvmMutuableLiveDataResultString.setValue(Integer.toString((int) cvmDoubleResultBuffer));
+                            cvmCalculatorViewModelFunctions.removeTheLastItemOfRecyclerView(cvmRecycLerViewArrayList);
                             cvmMutuableLiveDataListRecycLer.setValue(cvmRecycLerViewArrayList);
-                            calculatorViewModelFunctions.undoUiEffect(cvmRecycLerViewArrayList);
+                            cvmCalculatorViewModelFunctions.undoUiEffect(cvmRecycLerViewArrayList);
                         } else
                         {
 
@@ -229,7 +232,7 @@ public class CalculatorViewModel extends ViewModel
             case R.id.Minus:
 
                 /******Disable operators and enable the entry******/
-                calculatorViewModelFunctions.operatorsUiEffect(cvmRedoRecycLerViewArrayList);
+                cvmCalculatorViewModelFunctions.operatorsUiEffect(cvmRedoRecycLerViewArrayList);
                 /*****Make the value of character****/
                 cvmCharacterOperatorBuffer = '-';
 
@@ -240,7 +243,7 @@ public class CalculatorViewModel extends ViewModel
             case R.id.Plus:
 
                 /******Disable operators and enable the entry******/
-                calculatorViewModelFunctions.operatorsUiEffect(cvmRedoRecycLerViewArrayList);
+                cvmCalculatorViewModelFunctions.operatorsUiEffect(cvmRedoRecycLerViewArrayList);
                 /*****Make the value of character****/
                 cvmCharacterOperatorBuffer = '+';
                 break;
@@ -251,7 +254,7 @@ public class CalculatorViewModel extends ViewModel
             case R.id.Div:
 
                 /******Disable operators and enable the entry******/
-                calculatorViewModelFunctions.operatorsUiEffect(cvmRedoRecycLerViewArrayList);
+                cvmCalculatorViewModelFunctions.operatorsUiEffect(cvmRedoRecycLerViewArrayList);
                 /*****Make the value of character****/
                 cvmCharacterOperatorBuffer = '/';
                 break;
@@ -261,7 +264,7 @@ public class CalculatorViewModel extends ViewModel
             case R.id.Mult:
 
                 /******Disable operators and enable the entry******/
-                calculatorViewModelFunctions.operatorsUiEffect(cvmRedoRecycLerViewArrayList);
+                cvmCalculatorViewModelFunctions.operatorsUiEffect(cvmRedoRecycLerViewArrayList);
                 /*****Make the value of character****/
                 cvmCharacterOperatorBuffer = '*';
                 break;
@@ -272,10 +275,10 @@ public class CalculatorViewModel extends ViewModel
 
 
                 /**Receive the calculator operators and numbers and pushes the operators and integer to the list of redo**/
-                cvmIntegerSecondOperandBuffer = calculatorViewModelFunctions.getTheNumberRedoArrayList(cvmRedoRecycLerViewArrayList);
-                cvmCharacterOperatorBuffer = calculatorViewModelFunctions.getTheLastOperatorOfRedoArrayList(cvmRedoRecycLerViewArrayList);
+                cvmIntegerSecondOperandBuffer = cvmCalculatorViewModelFunctions.getTheNumberRedoArrayList(cvmRedoRecycLerViewArrayList);
+                cvmCharacterOperatorBuffer = cvmCalculatorViewModelFunctions.getTheLastOperatorOfRedoArrayList(cvmRedoRecycLerViewArrayList);
                 /****Removes the operator and second operand on the peak of the arraylist of Redo Array List***/
-                calculatorViewModelFunctions.removeLastItemOfRedoArrayList(cvmRedoRecycLerViewArrayList);
+                cvmCalculatorViewModelFunctions.removeLastItemOfRedoArrayList(cvmRedoRecycLerViewArrayList);
                 /******if the RedoRecyclerViewArrayList is empty**/
                 if(cvmRedoRecycLerViewArrayList.size()==0)
                 {
@@ -283,13 +286,13 @@ public class CalculatorViewModel extends ViewModel
                     cvmBindingCalculatorActivity.Redo.setEnabled(false);
                 }
                 /****Pushes the operator and second operand on the peak of the RecyclerViewList***/
-                calculatorViewModelFunctions.pushTheNumberAndOperatorOnRecyclerViewList(cvmCharacterOperatorBuffer, cvmIntegerSecondOperandBuffer,cvmRecycLerViewArrayList);
+                cvmCalculatorViewModelFunctions.pushTheNumberAndOperatorOnRecyclerViewList(cvmCharacterOperatorBuffer, cvmIntegerSecondOperandBuffer,cvmRecycLerViewArrayList);
                 /**Set the data of list to be observed by UI **/
                 cvmMutuableLiveDataListRecycLer.setValue(cvmRecycLerViewArrayList);
                 /******Do the default calculation operation*****/
-                cvmIntResultBuffer=calculatorViewModelFunctions.calc_Operation(cvmCharacterOperatorBuffer,cvmIntegerSecondOperandBuffer,cvmIntResultBuffer);
+                cvmDoubleResultBuffer=cvmCalculatorViewModelFunctions.calc_Operation(cvmCharacterOperatorBuffer,cvmIntegerSecondOperandBuffer,(int)cvmDoubleResultBuffer);
                 /**Set the data of Result sumation to be observed by UI **/
-                cvmMutuableLiveDataResultString.setValue(Integer.toString(cvmIntResultBuffer));
+                cvmMutuableLiveDataResultString.setValue(Integer.toString((int)cvmDoubleResultBuffer));
                 /*****Endables the undo button****/
                 cvmBindingCalculatorActivity.Undo.setEnabled(true);
 
@@ -300,23 +303,23 @@ public class CalculatorViewModel extends ViewModel
             case R.id.Undo:
 
                 /**Receive the calculator operators and numbers and pushes the operators and integer to the list of redo**/
-                cvmCharacterOperatorBuffer = calculatorViewModelFunctions.getTheLastOperatorOfRecycLerViewList(cvmRecycLerViewArrayList);
-                cvmIntegerSecondOperandBuffer = calculatorViewModelFunctions.getTheLastNumberOfRecycLerViewList(cvmRecycLerViewArrayList);
+                cvmCharacterOperatorBuffer = cvmCalculatorViewModelFunctions.getTheLastOperatorOfRecycLerViewList(cvmRecycLerViewArrayList);
+                cvmIntegerSecondOperandBuffer = cvmCalculatorViewModelFunctions.getTheLastNumberOfRecycLerViewList(cvmRecycLerViewArrayList);
                 /****Pushes the operator and second operand on the peak of the arraylist of Redo Array List***/
-                calculatorViewModelFunctions.pushPassedOperatorAndNumberOnRedoArrayList(cvmCharacterOperatorBuffer, cvmIntegerSecondOperandBuffer,cvmRedoRecycLerViewArrayList);
+                cvmCalculatorViewModelFunctions.pushPassedOperatorAndNumberOnRedoArrayList(cvmCharacterOperatorBuffer, cvmIntegerSecondOperandBuffer,cvmRedoRecycLerViewArrayList);
                 /**If the size of recyclerView arraylist is not equal zero**/
                 if (cvmRecycLerViewArrayList.size() != 0)
                 {
                     /**Doing undoOperation and return sum**/
-                    cvmIntResultBuffer=calculatorViewModelFunctions.calc_Undo_Operation(cvmCharacterOperatorBuffer,cvmIntegerSecondOperandBuffer,cvmIntResultBuffer);
+                    cvmDoubleResultBuffer=cvmCalculatorViewModelFunctions.calc_Undo_Operation(cvmCharacterOperatorBuffer,cvmIntegerSecondOperandBuffer,(int)cvmDoubleResultBuffer);
                     /**Set the data of Result sumation to be observed by UI **/
-                    cvmMutuableLiveDataResultString.setValue(Integer.toString(cvmIntResultBuffer));
+                    cvmMutuableLiveDataResultString.setValue(Integer.toString((int)cvmDoubleResultBuffer));
                     /*******Remove the last item on recyclerView******/
-                    calculatorViewModelFunctions.removeTheLastItemOfRecyclerView(cvmRecycLerViewArrayList);
+                    cvmCalculatorViewModelFunctions.removeTheLastItemOfRecyclerView(cvmRecycLerViewArrayList);
                     /**Set the data of list to be observed by UI **/
                     cvmMutuableLiveDataListRecycLer.setValue(cvmRecycLerViewArrayList);
                     /****Do the undo effects on UI ***/
-                    calculatorViewModelFunctions.undoUiEffect(cvmRecycLerViewArrayList);
+                    cvmCalculatorViewModelFunctions.undoUiEffect(cvmRecycLerViewArrayList);
                 }
                 break;
             /**
@@ -325,16 +328,27 @@ public class CalculatorViewModel extends ViewModel
             case R.id.Equal:
 
                 /*****Change value of integer passed as 2nd operand****/
-                cvmIntegerSecondOperandBuffer = calculatorViewModelFunctions.getIntNumberFromEntry();
-                /*******Save the update on Mutual Data to be shown on the UI********/
-                calculatorViewModelFunctions.pushTheNumberAndOperatorOnRecyclerViewList(cvmCharacterOperatorBuffer, cvmIntegerSecondOperandBuffer,cvmRecycLerViewArrayList);
-                cvmMutuableLiveDataListRecycLer.setValue(cvmRecycLerViewArrayList);
+                cvmIntegerSecondOperandBuffer = cvmCalculatorViewModelFunctions.getIntNumberFromEntry();
+                /*****In case division by zero****/
+                if(cvmCharacterOperatorBuffer=='/' && cvmIntegerSecondOperandBuffer==0)
+                {
+                    Toast.makeText(cvmContext, "Division by zero prohibted", Toast.LENGTH_SHORT).show();
+                    cvmCalculatorViewModelFunctions.equalWhenThereIsNoDivisonByZeorUiEffect();
+                }
+                else
+                {
+                    /*******Save the update on Mutual Data to be shown on the UI********/
+                    cvmCalculatorViewModelFunctions.pushTheNumberAndOperatorOnRecyclerViewList(cvmCharacterOperatorBuffer, cvmIntegerSecondOperandBuffer, cvmRecycLerViewArrayList);
+                    cvmMutuableLiveDataListRecycLer.setValue(cvmRecycLerViewArrayList);
 
-                /******Disable equal and remove number from edit text and write the default hint******/
-                calculatorViewModelFunctions.equalUiEffect();
-                /**********Here is the operation*********/
-                cvmIntResultBuffer=calculatorViewModelFunctions.calc_Operation(cvmCharacterOperatorBuffer,cvmIntegerSecondOperandBuffer,cvmIntResultBuffer);
-                cvmMutuableLiveDataResultString.setValue(Integer.toString(cvmIntResultBuffer));
+
+                    /**********Here is the operation*********/
+                    cvmDoubleResultBuffer = cvmCalculatorViewModelFunctions.calc_Operation(cvmCharacterOperatorBuffer, cvmIntegerSecondOperandBuffer, (int) cvmDoubleResultBuffer);
+                    cvmMutuableLiveDataResultString.setValue(Integer.toString((int) cvmDoubleResultBuffer));
+                    /******Disable equal and remove number from edit text and write the default hint******/
+                    cvmCalculatorViewModelFunctions.equalUiEffect();
+
+                }
 
             break;
 
